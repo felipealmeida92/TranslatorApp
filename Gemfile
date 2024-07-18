@@ -44,6 +44,14 @@ gem "bootsnap", require: false
 #
 gem 'rest-client'
 
+#Google Cloud Translate
+gem 'google-cloud-translate'
+
+#Figaro
+
+gem 'figaro'
+
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
