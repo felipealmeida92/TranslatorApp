@@ -1,23 +1,19 @@
-<h1>New Translation</h1>
-
-<%= form_with(model: @translation, local: true) do |form| %>
-  <div class="field">
-    <%= form.label :original_text %>
+<%= form_with(model: @translation, url: translations_path, local: true) do |form| %>
+  <div>
+    <%= form.label :original_text, "Texto Original" %>
     <%= form.text_area :original_text %>
   </div>
-
-  <div class="field">
-    <%= form.label :source_lang %>
+  <div>
+    <%= form.label :source_lang, "Idioma de Origem" %>
     <%= form.text_field :source_lang %>
   </div>
-
-  <div class="field">
-    <%= form.label :target_lang %>
+  <div>
+    <%= form.label :target_lang, "Idioma de Destino" %>
     <%= form.text_field :target_lang %>
   </div>
-
-  <div class="actions">
-    <%= form.submit "Translate" %>
+  <div>
+    <%= form.submit "Traduzir" %>
   </div>
 <% end %>
+
 
