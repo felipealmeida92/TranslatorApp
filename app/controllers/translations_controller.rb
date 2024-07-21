@@ -1,18 +1,24 @@
-require "google/cloud/translate/v2"
-
 class TranslationsController < ApplicationController
   def new
-    @translation = Translation.new
   end
 
   def create
-    @translation = Translation.new(translation_params)
-    translated_text = translate(@translation.original_text, @translation.source_lang, @translation.target_lang)
-    @translation.translated_text = translated_text
+    original_text = params[:translation][:original_text]
+    source_lang = params[:translation][:source_lang]
+    target_lang = params[:translation][:target_lang]
+
+    translated_text = translate(original_text, source_lang, target_lang)
+
+    @translation = Translation.create(
+      original_text: original_text,
+      translated_text: translated_text,
+      source_lang: source_lang,
+      target_lang: target_lang,
+      translated_at: Time.now
+    )
 
     if @translation.save
-      save_translation_to_file(@translation)
-      redirect_to @translation, notice: 'Translation was successfully created.'
+      redirect_to translation_path(@translation)
     else
       render :new
     end
@@ -24,25 +30,14 @@ class TranslationsController < ApplicationController
 
   private
 
-  def translation_params
-    params.require(:translation).permit(:original_text, :source_lang, :target_lang)
-  end
-
   def translate(text, source_lang, target_lang)
-    translate = Google::Cloud::Translate::V2.new(key: ENV['GOOGLE_CLOUD_API_KEY'])
-    response = translate.translate text, from: source_lang, to: target_lang
-    response.text
-  end
-
-  def save_translation_to_file(translation)
-    timestamp = Time.now.strftime("%d-%m-%y_%H:%M")
-    filename = "translation_#{timestamp}.txt"
-    File.open(filename, 'w') do |file|
-      file.puts "Original Text: #{translation.original_text}"
-      file.puts "Translated Text: #{translation.translated_text}"
-      file.puts "Source Language: #{translation.source_lang}"
-      file.puts "Target Language: #{translation.target_lang}"
-      file.puts "Timestamp: #{timestamp}"
-    end
+    response = RestClient.post "https://libretranslate.de/translate", {
+      q: text,
+      source: source_lang,
+      target: target_lang
+    }.to_json, { content_type: :json, accept: :json }
+    result = JSON.parse(response.body)
+    result['translatedText']
   end
 end
+
