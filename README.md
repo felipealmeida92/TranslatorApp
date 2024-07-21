@@ -1,4 +1,3 @@
-```markdown
 # TranslatorApp
 
 **TranslatorApp** é um aplicativo web desenvolvido em Ruby on Rails que permite aos usuários traduzir textos de um idioma para outro usando uma API de tradução. O projeto foi criado para demonstrar a integração com APIs externas e a criação de uma interface de usuário interativa.
@@ -24,7 +23,6 @@ Siga os passos abaixo para configurar e executar o projeto localmente:
    ```bash
    git clone https://github.com/seu-usuario/TranslatorApp.git
    cd TranslatorApp
-   ```
 
 2. **Instale as Dependências**:
 
